@@ -1,3 +1,4 @@
+import OrderApprovalRequest from '../useCase/OrderApprovalRequest';
 import OrderItem from './OrderItem';
 import { OrderStatus } from './OrderStatus';
 
@@ -61,6 +62,9 @@ class Order {
 
   public setId(id: number): void {
       this.id = id;
+  }
+  public runApproval(request: OrderApprovalRequest): void {
+    this.status = this.status.runApproval(request)
   }
 }
 
