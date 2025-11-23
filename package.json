@@ -1,0 +1,51 @@
+{
+  "name": "tell-dont-ask-kata",
+  "version": "1.0.0",
+  "description": "What a domain...",
+  "scripts": {
+    "test": "jest --watchAll"
+  },
+  "devDependencies": {
+    "@types/node":"*",
+    "@types/jest":"*",
+    "jest":       "*",
+    "ts-jest":    "*",
+    "ts-node":    "*",
+    "typescript": "*"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "html"
+    ],
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "(\\.|/)(test)\\.(js|ts?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ]
+  },
+  "standard": {
+    "env": [
+      "node",
+      "jest"
+    ],
+    "globals": [
+      "expect"
+    ]
+  },
+  "_moduleAliases": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
