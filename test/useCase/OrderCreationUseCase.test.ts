@@ -1,6 +1,6 @@
 import Category from '../../src/domain/Category';
 import Order from '../../src/domain/Order';
-import { OrderStatus } from '../../src/domain/OrderStatus';
+import { OrderCreated, } from '../../src/domain/OrderStatus';
 import Product from '../../src/domain/Product';
 import { ProductCatalog } from '../../src/repository/ProductCatalog';
 import OrderCreationUseCase from '../../src/useCase/OrderCreationUseCase';
@@ -44,7 +44,7 @@ describe('OrderApprovalUseCase', () => {
       useCase.run(request);
 
       const insertedOrder: Order = orderRepository.getSavedOrder();
-      expect(insertedOrder.getStatus()).toBe(OrderStatus.CREATED);
+      expect(insertedOrder.getStatus().isCreated()).toBe(new OrderCreated().isCreated());
       expect(insertedOrder.getTotal()).toBe(23.20);
       expect(insertedOrder.getTax()).toBe((2.13));
       expect(insertedOrder.getCurrency()).toBe(('EUR'));

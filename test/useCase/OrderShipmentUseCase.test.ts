@@ -1,5 +1,5 @@
 import Order from "../../src/domain/Order";
-import { OrderStatus } from "../../src/domain/OrderStatus";
+import { OrderApproved, OrderCreated, OrderRejected, OrderShipped } from "../../src/domain/OrderStatus";
 import OrderCannotBeShippedException from "../../src/useCase/OrderCannotBeShippedException";
 import OrderCannotBeShippedTwiceException from "../../src/useCase/OrderCannotBeShippedTwiceException";
 import OrderShipmentRequest from "../../src/useCase/OrderShipmentRequest";
@@ -21,7 +21,7 @@ describe('OrderShipmentUseCase', () => {
   it('shipApprovedOrder', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(1);
-    initialOrder.setStatus(OrderStatus.APPROVED);
+    initialOrder.setStatus(new OrderApproved());
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -29,14 +29,14 @@ describe('OrderShipmentUseCase', () => {
 
     useCase.run(request);
 
-    expect(orderRepository.getSavedOrder().getStatus()).toBe(OrderStatus.SHIPPED);
+    expect(orderRepository.getSavedOrder().getStatus().isShipped()).toBe(new OrderShipped().isShipped());
     expect(shipmentService.getShippedOrder()).toBe(initialOrder);
   });
 
   it('createdOrdersCannotBeShipped', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(2);
-    initialOrder.setStatus(OrderStatus.CREATED);
+    initialOrder.setStatus(new OrderCreated());
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -50,7 +50,7 @@ describe('OrderShipmentUseCase', () => {
   it('rejectedOrdersCannotBeShipped', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(3);
-    initialOrder.setStatus(OrderStatus.REJECTED);
+    initialOrder.setStatus(new OrderRejected());
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -64,7 +64,7 @@ describe('OrderShipmentUseCase', () => {
   it('shippedOrdersCannotBeShippedAgain', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(4);
-    initialOrder.setStatus(OrderStatus.SHIPPED);
+    initialOrder.setStatus(new OrderShipped());
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
