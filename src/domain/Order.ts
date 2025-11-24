@@ -56,10 +56,6 @@ class Order {
       return this.status;
   }
 
-  public  setStatus(status: OrderStatus): void {
-      this.status = status;
-  }
-
   public getId(): number {
       return this.id;
   }

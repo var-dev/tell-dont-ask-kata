@@ -1,5 +1,6 @@
 import Order from "../../src/domain/Order";
-import { OrderApproved, OrderCreated, OrderRejected, OrderShipped } from "../../src/domain/OrderStatus";
+import { OrderShipped } from "../../src/domain/OrderStatus";
+import OrderApprovalRequest from "../../src/useCase/OrderApprovalRequest";
 import OrderCannotBeShippedException from "../../src/useCase/OrderCannotBeShippedException";
 import OrderCannotBeShippedTwiceException from "../../src/useCase/OrderCannotBeShippedTwiceException";
 import OrderShipmentRequest from "../../src/useCase/OrderShipmentRequest";
@@ -21,7 +22,9 @@ describe('OrderShipmentUseCase', () => {
   it('shipApprovedOrder', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(1);
-    initialOrder.setStatus(new OrderApproved());
+    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
+    requestToBeApproved.setApproved(true)
+    initialOrder.runApproval(requestToBeApproved)
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -36,7 +39,6 @@ describe('OrderShipmentUseCase', () => {
   it('createdOrdersCannotBeShipped', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(2);
-    initialOrder.setStatus(new OrderCreated());
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -50,7 +52,9 @@ describe('OrderShipmentUseCase', () => {
   it('rejectedOrdersCannotBeShipped', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(3);
-    initialOrder.setStatus(new OrderRejected());
+    let requestToBeRejected: OrderApprovalRequest = new OrderApprovalRequest();
+    requestToBeRejected.setApproved(false)
+    initialOrder.runApproval(requestToBeRejected)
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -64,7 +68,10 @@ describe('OrderShipmentUseCase', () => {
   it('shippedOrdersCannotBeShippedAgain', () => {
     let initialOrder: Order = new Order();
     initialOrder.setId(4);
-    initialOrder.setStatus(new OrderShipped());
+    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
+    requestToBeApproved.setApproved(true)
+    initialOrder.runApproval(requestToBeApproved)
+    initialOrder.runShipment()
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
