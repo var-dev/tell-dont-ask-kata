@@ -23,12 +23,7 @@ class OrderCreationUseCase {
       if (product === undefined) {
         throw new UnknownProductException();
       }
-      const orderItem: OrderItem = new OrderItem();
-      orderItem.setProduct(product);
-      orderItem.setQuantity(itemRequest.getQuantity());
-      orderItem.setTax((product.calculateUnitaryTax() * itemRequest.getQuantity()));
-      orderItem.setTaxedAmount((Math.round(product.calculateUnitaryTaxedAmount() * itemRequest.getQuantity() * 100) / 100));
-      order.addItem(orderItem);
+      order.addItem(new OrderItem(product, itemRequest.getQuantity()));
     }
     
     this.orderRepository.save(order);
