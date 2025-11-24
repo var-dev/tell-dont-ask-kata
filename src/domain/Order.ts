@@ -59,6 +59,9 @@ class Order {
   public runShipment(): void {
     this.status = this.status.runShipment()
   }
+  addItem(item: OrderItem){
+    this.items.push(item);
+  }
 }
 
 export default Order;
