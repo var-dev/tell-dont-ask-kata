@@ -1,5 +1,7 @@
 import ApprovedOrderCannotBeRejectedException from "../useCase/ApprovedOrderCannotBeRejectedException";
 import OrderApprovalRequest from "../useCase/OrderApprovalRequest";
+import OrderCannotBeShippedException from "../useCase/OrderCannotBeShippedException";
+import OrderCannotBeShippedTwiceException from "../useCase/OrderCannotBeShippedTwiceException";
 import RejectedOrderCannotBeApprovedException from "../useCase/RejectedOrderCannotBeApprovedException";
 import ShippedOrdersCannotBeChangedException from "../useCase/ShippedOrdersCannotBeChangedException";
 
@@ -8,7 +10,8 @@ export interface OrderStatus {
   isRejected(): boolean;
   isShipped(): boolean;
   isCreated(): boolean;
-  runApproval(request: OrderApprovalRequest): OrderStatus
+  runApproval(request: OrderApprovalRequest): OrderStatus;
+  runShipment(): OrderStatus
 }
 
 export class OrderApproved implements OrderStatus {
@@ -22,6 +25,9 @@ export class OrderApproved implements OrderStatus {
     }
     return this;
   }
+  public runShipment(): OrderStatus {
+    return  new OrderShipped();
+  }
 }
 
 export class OrderRejected implements OrderStatus {
@@ -32,6 +38,9 @@ export class OrderRejected implements OrderStatus {
   public runApproval(request: OrderApprovalRequest): OrderStatus  {
     throw new RejectedOrderCannotBeApprovedException();
   }
+  public runShipment(): OrderStatus {
+    throw new OrderCannotBeShippedException();
+  }
 }
 
 export class OrderShipped implements OrderStatus {
@@ -41,6 +50,9 @@ export class OrderShipped implements OrderStatus {
   isCreated(): boolean {return false;}
   public runApproval(request: OrderApprovalRequest): OrderStatus  { 
     throw new ShippedOrdersCannotBeChangedException(); 
+  }
+  public runShipment(): OrderStatus {
+    throw new OrderCannotBeShippedTwiceException();
   }
 }
 
@@ -54,6 +66,9 @@ export class OrderCreated implements OrderStatus {
       return new OrderApproved()
     }
     return new OrderRejected()
+  }
+  public runShipment(): OrderStatus {
+    throw new OrderCannotBeShippedException();
   }
 }
 

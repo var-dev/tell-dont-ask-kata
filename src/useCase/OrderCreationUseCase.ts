@@ -1,6 +1,5 @@
 import Order from '../domain/Order';
 import OrderItem from '../domain/OrderItem';
-import { OrderCreated } from '../domain/OrderStatus';
 import Product from '../domain/Product';
 import OrderRepository from '../repository/OrderRepository';
 import { ProductCatalog } from '../repository/ProductCatalog';
@@ -18,7 +17,6 @@ class OrderCreationUseCase {
 
   public run(request: SellItemsRequest): void {
     const order: Order = new Order();
-    order.setStatus(new OrderCreated());
     order.setItems([]);
     order.setCurrency('EUR');
     order.setTotal(0);

@@ -1,6 +1,6 @@
 import OrderApprovalRequest from '../useCase/OrderApprovalRequest';
 import OrderItem from './OrderItem';
-import { OrderStatus } from './OrderStatus';
+import { OrderCreated, OrderStatus } from './OrderStatus';
 
 class Order {
   //@ts-ignore
@@ -15,6 +15,10 @@ class Order {
   private status: OrderStatus;
   //@ts-ignore
   private id: number;
+
+  constructor (){
+    this.status = new OrderCreated();
+  }
 
   public getTotal(): number {
       return this.total;
@@ -52,7 +56,7 @@ class Order {
       return this.status;
   }
 
-  public setStatus(status: OrderStatus): void {
+  public  setStatus(status: OrderStatus): void {
       this.status = status;
   }
 
@@ -65,6 +69,9 @@ class Order {
   }
   public runApproval(request: OrderApprovalRequest): void {
     this.status = this.status.runApproval(request)
+  }
+  public runShipment(): void {
+    this.status = this.status.runShipment()
   }
 }
 
