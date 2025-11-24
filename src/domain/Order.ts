@@ -6,7 +6,7 @@ class Order {
   //@ts-ignore
   private total: number;
   //@ts-ignore
-  private items: OrderItem[];
+  private items: OrderItem[] = [];
   //@ts-ignore
   private tax: number;
   //@ts-ignore
@@ -21,10 +21,6 @@ class Order {
       return this.total;
   }
 
-  public setTotal(total: number): void  {
-      this.total = total;
-  }
-
   public getCurrency(): string {
       return this.currency;
   }
@@ -33,16 +29,8 @@ class Order {
       return this.items;
   }
 
-  public setItems(items: OrderItem[]): void {
-      this.items = items;
-  }
-
   public getTax(): number {
       return this.tax;
-  }
-
-  public setTax(tax: number): void {
-      this.tax = tax;
   }
 
   public getStatus(): OrderStatus {
@@ -59,8 +47,16 @@ class Order {
   public runShipment(): void {
     this.status = this.status.runShipment()
   }
-  addItem(item: OrderItem){
+  public addItem(item: OrderItem){
     this.items.push(item);
+    this.calculateTax()
+    this.calculateTotal()
+  }
+  public calculateTotal():void {
+    this.total = this.items.reduce((sum, currentItem)=> sum + currentItem.getTaxedAmount(),0)
+  }
+  public calculateTax():void {
+    this.tax = this.items.reduce((sum, currentItem)=> sum + currentItem.getTax(),0)
   }
 }
 
