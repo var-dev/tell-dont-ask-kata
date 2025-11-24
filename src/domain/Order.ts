@@ -6,17 +6,14 @@ class Order {
   //@ts-ignore
   private total: number;
   //@ts-ignore
-  private currency: string;
-  //@ts-ignore
   private items: OrderItem[];
   //@ts-ignore
   private tax: number;
   //@ts-ignore
   private status: OrderStatus;
-  //@ts-ignore
-  private id: number;
 
-  constructor (){
+
+  constructor ( private id: number = 1,  private currency: string = 'EUR'){
     this.status = new OrderCreated();
   }
 
@@ -30,10 +27,6 @@ class Order {
 
   public getCurrency(): string {
       return this.currency;
-  }
-
-  public setCurrency(currency: string): void {
-      this.currency = currency;
   }
 
   public getItems(): OrderItem[] {
@@ -60,9 +53,6 @@ class Order {
       return this.id;
   }
 
-  public setId(id: number): void {
-      this.id = id;
-  }
   public runApproval(request: OrderApprovalRequest): void {
     this.status = this.status.runApproval(request)
   }

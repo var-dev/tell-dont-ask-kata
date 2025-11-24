@@ -20,8 +20,7 @@ describe('OrderShipmentUseCase', () => {
   });
   
   it('shipApprovedOrder', () => {
-    let initialOrder: Order = new Order();
-    initialOrder.setId(1);
+    let initialOrder: Order = new Order(1, 'EUR');
     let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
     requestToBeApproved.setApproved(true)
     initialOrder.runApproval(requestToBeApproved)
@@ -37,8 +36,7 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('createdOrdersCannotBeShipped', () => {
-    let initialOrder: Order = new Order();
-    initialOrder.setId(2);
+    let initialOrder: Order = new Order(2, 'EUR');
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest();
@@ -50,8 +48,7 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('rejectedOrdersCannotBeShipped', () => {
-    let initialOrder: Order = new Order();
-    initialOrder.setId(3);
+    let initialOrder: Order = new Order(3, 'EUR');
     let requestToBeRejected: OrderApprovalRequest = new OrderApprovalRequest();
     requestToBeRejected.setApproved(false)
     initialOrder.runApproval(requestToBeRejected)
@@ -66,8 +63,7 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('shippedOrdersCannotBeShippedAgain', () => {
-    let initialOrder: Order = new Order();
-    initialOrder.setId(4);
+    let initialOrder: Order = new Order(4, 'EUR');
     let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
     requestToBeApproved.setApproved(true)
     initialOrder.runApproval(requestToBeApproved)

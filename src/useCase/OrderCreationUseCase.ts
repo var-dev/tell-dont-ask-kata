@@ -16,9 +16,8 @@ class OrderCreationUseCase {
   }
 
   public run(request: SellItemsRequest): void {
-    const order: Order = new Order();
+    const order: Order = new Order(1, 'EUR');
     order.setItems([]);
-    order.setCurrency('EUR');
     order.setTotal(0);
     order.setTax(0);
 
