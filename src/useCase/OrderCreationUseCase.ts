@@ -1,10 +1,7 @@
 import Order from '../domain/Order';
-import OrderItem from '../domain/OrderItem';
-import Product from '../domain/Product';
 import OrderRepository from '../repository/OrderRepository';
 import { ProductCatalog } from '../repository/ProductCatalog';
 import SellItemsRequest from './SellItemsRequest';
-import UnknownProductException from './UnknownProductException';
 
 class OrderCreationUseCase {
   private readonly orderRepository: OrderRepository;
@@ -16,16 +13,7 @@ class OrderCreationUseCase {
   }
 
   public run(request: SellItemsRequest): void {
-    const order: Order = new Order(1, 'EUR');
-
-    for (const itemRequest of request.getRequests()) {
-      const product: Product = this.productCatalog.getByName(itemRequest.getProductName());
-      if (product === undefined) {
-        throw new UnknownProductException();
-      }
-      order.addItem(new OrderItem(product, itemRequest.getQuantity()));
-    }
-    
+    const order: Order = new Order(1, 'EUR').runSellItemsRequest(request, this.productCatalog);
     this.orderRepository.save(order);
   }
 }

@@ -1,6 +1,9 @@
+import { ProductCatalog } from '../repository/ProductCatalog';
 import OrderApprovalRequest from '../useCase/OrderApprovalRequest';
+import SellItemsRequest from '../useCase/SellItemsRequest';
 import OrderItem from './OrderItem';
 import { OrderCreated, OrderStatus } from './OrderStatus';
+import Product from './Product';
 
 class Order {
   //@ts-ignore
@@ -13,8 +16,13 @@ class Order {
   private status: OrderStatus;
 
 
-  constructor ( private id: number = 1,  private currency: string = 'EUR'){
+  constructor ( 
+    private id: number = 1,  
+    private currency: string = 'EUR',
+    
+){
     this.status = new OrderCreated();
+    return this
   }
 
   public getTotal(): number {
@@ -57,6 +65,13 @@ class Order {
   }
   public calculateTax():void {
     this.tax = this.items.reduce((sum, currentItem)=> sum + currentItem.getTax(),0)
+  }
+  public runSellItemsRequest(request: SellItemsRequest, productCatalog: ProductCatalog){
+    for (const itemRequest of request.getRequests()) {
+      const product: Product = productCatalog.getByName(itemRequest.getProductName());
+      this.addItem(new OrderItem(product, itemRequest.getQuantity()));
+    }
+    return this
   }
 }
 
