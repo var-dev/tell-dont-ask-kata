@@ -1,21 +1,8 @@
 class SellItemRequest {
-  //@ts-ignore
-  private quantity: number;
-  //@ts-ignore
-  private productName: string;
-
-  public setQuantity(quantity: number): void{
-      this.quantity = quantity;
-  }
-
-  public setProductName(productName: string): void {
-      this.productName = productName;
-  }
-
+  constructor(private productName: string, private quantity: number){}
   public getQuantity(): number {
       return this.quantity;
   }
-
   public getProductName(): string {
       return this.productName;
   }
