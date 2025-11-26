@@ -5,6 +5,10 @@ import OrderItem from './OrderItem';
 import { OrderCreated, OrderStatus } from './OrderStatus';
 import Product from './Product';
 
+class OrderId {
+  constructor (public readonly id: number){}
+}
+
 class Order {
   //@ts-ignore
   private total: number;
@@ -12,15 +16,13 @@ class Order {
   private items: OrderItem[] = [];
   //@ts-ignore
   private tax: number;
-  //@ts-ignore
   private status: OrderStatus;
 
 
   constructor ( 
-    private id: number = 1,  
-    private currency: string = 'EUR',
-    
-){
+    private id: OrderId,  
+    private currency: string,
+  ){
     this.status = new OrderCreated();
     return this
   }
@@ -45,7 +47,7 @@ class Order {
       return this.status;
   }
 
-  public getId(): number {
+  public getId(): OrderId {
       return this.id;
   }
 
@@ -75,5 +77,5 @@ class Order {
   }
 }
 
-export default Order;
+export {Order, OrderId};
 

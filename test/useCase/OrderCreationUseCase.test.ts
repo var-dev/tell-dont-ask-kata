@@ -1,5 +1,5 @@
 import Category from '../../src/domain/Category';
-import Order from '../../src/domain/Order';
+import {Order,OrderId} from '../../src/domain/Order';
 import { OrderCreated, } from '../../src/domain/OrderStatus';
 import Product from '../../src/domain/Product';
 import { ProductCatalog } from '../../src/repository/ProductCatalog';
@@ -26,7 +26,7 @@ describe('OrderApprovalUseCase', () => {
       request.addRequest(saladRequest);
       request.addRequest(tomatoRequest);
 
-      useCase.run(request, new Order(1, 'EUR'));
+      useCase.run(request, new Order(new OrderId(1), 'EUR'));
 
       const insertedOrder: Order = orderRepository.getSavedOrder();
       expect(insertedOrder.getStatus().isCreated()).toBe(new OrderCreated().isCreated());
@@ -51,6 +51,6 @@ describe('OrderApprovalUseCase', () => {
       let unknownProductRequest: SellItemRequest = new SellItemRequest('unknown product', 8);
       request.addRequest(unknownProductRequest);
 
-      expect(() => useCase.run(request, new Order(1, 'EUR'))).toThrow(UnknownProductException);
+      expect(() => useCase.run(request, new Order(new OrderId(1), 'EUR'))).toThrow(UnknownProductException);
   });
 });

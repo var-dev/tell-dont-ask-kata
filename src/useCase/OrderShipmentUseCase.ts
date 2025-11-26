@@ -1,4 +1,4 @@
-import Order from '../domain/Order';
+import {Order} from '../domain/Order';
 import OrderRepository from '../repository/OrderRepository';
 import { ShipmentService } from '../service/ShipmentService';
 import {OrderShipmentRequest} from './OrderShipmentRequest';
@@ -13,7 +13,7 @@ class OrderShipmentUseCase {
   }
 
   public run(request: OrderShipmentRequest): void {
-    const order: Order = this.orderRepository.getById(request.getOrderId().orderID);
+    const order: Order = this.orderRepository.getById(request.getOrderId());
     order.runShipment()
     this.shipmentService.ship(order);
     this.orderRepository.save(order);

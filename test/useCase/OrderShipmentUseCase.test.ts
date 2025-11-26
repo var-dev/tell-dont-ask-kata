@@ -1,4 +1,4 @@
-import Order from "../../src/domain/Order";
+import {Order,OrderId} from "../../src/domain/Order";
 import { OrderShipped } from "../../src/domain/OrderStatus";
 import OrderApprovalRequest from "../../src/useCase/OrderApprovalRequest";
 import OrderCannotBeShippedException from "../../src/useCase/OrderCannotBeShippedException";
@@ -20,8 +20,8 @@ describe('OrderShipmentUseCase', () => {
   });
   
   it('shipApprovedOrder', () => {
-    let initialOrder: Order = new Order(1, 'EUR');
-    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
+    let initialOrder: Order = new Order(new OrderId(1), 'EUR');
+    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     requestToBeApproved.setApproved(true)
     initialOrder.runApproval(requestToBeApproved)
     orderRepository.addOrder(initialOrder);
@@ -35,7 +35,7 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('createdOrdersCannotBeShipped', () => {
-    let initialOrder: Order = new Order(2, 'EUR');
+    let initialOrder: Order = new Order(new OrderId(2), 'EUR');
     orderRepository.addOrder(initialOrder);
 
     let request: OrderShipmentRequest = new OrderShipmentRequest(new OrderShipmentId(2));
@@ -46,8 +46,8 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('rejectedOrdersCannotBeShipped', () => {
-    let initialOrder: Order = new Order(3, 'EUR');
-    let requestToBeRejected: OrderApprovalRequest = new OrderApprovalRequest();
+    let initialOrder: Order = new Order(new OrderId(3), 'EUR');
+    let requestToBeRejected: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     requestToBeRejected.setApproved(false)
     initialOrder.runApproval(requestToBeRejected)
     orderRepository.addOrder(initialOrder);
@@ -60,8 +60,8 @@ describe('OrderShipmentUseCase', () => {
   });
 
   it('shippedOrdersCannotBeShippedAgain', () => {
-    let initialOrder: Order = new Order(4, 'EUR');
-    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
+    let initialOrder: Order = new Order(new OrderId(4), 'EUR');
+    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     requestToBeApproved.setApproved(true)
     initialOrder.runApproval(requestToBeApproved)
     initialOrder.runShipment()

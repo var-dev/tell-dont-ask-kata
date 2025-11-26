@@ -1,4 +1,4 @@
-import Order from '../../src/domain/Order';
+import {Order,OrderId} from '../../src/domain/Order';
 import { OrderApproved, OrderRejected } from '../../src/domain/OrderStatus';
 import ApprovedOrderCannotBeRejectedException from '../../src/useCase/ApprovedOrderCannotBeRejectedException';
 import OrderApprovalRequest from '../../src/useCase/OrderApprovalRequest';
@@ -16,11 +16,10 @@ describe('OrderApprovalUseCase', () => {
     useCase = new OrderApprovalUseCase(orderRepository);
   });
   it('approvedExistingOrder', () => {
-    let initialOrder: Order = new Order(1, 'EUR');
+    let initialOrder: Order = new Order(new OrderId(1), 'EUR');
     orderRepository.addOrder(initialOrder);
 
-    let request: OrderApprovalRequest = new OrderApprovalRequest();
-    request.setOrderId(1);
+    let request: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     request.setApproved(true);
 
     useCase.run(request);
@@ -30,11 +29,10 @@ describe('OrderApprovalUseCase', () => {
   });
 
   it('rejectedExistingOrder', () => {
-    let initialOrder: Order = new Order(1, 'EUR');
+    let initialOrder: Order = new Order(new OrderId(1), 'EUR');
     orderRepository.addOrder(initialOrder);
 
-    let request: OrderApprovalRequest = new OrderApprovalRequest();
-    request.setOrderId(1);
+    let request: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     request.setApproved(false);
 
     useCase.run(request);
@@ -44,15 +42,14 @@ describe('OrderApprovalUseCase', () => {
   });
 
   it('cannotApproveRejectedOrder', () => {
-    const initialOrder: Order = new Order(1, 'EUR');
-    let requestToBeRejected: OrderApprovalRequest = new OrderApprovalRequest();
+    const initialOrder: Order = new Order(new OrderId(1), 'EUR');
+    let requestToBeRejected: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     requestToBeRejected.setApproved(false)
     initialOrder.runApproval(requestToBeRejected)
     
     orderRepository.addOrder(initialOrder);
 
-    const request: OrderApprovalRequest = new OrderApprovalRequest();
-    request.setOrderId(1);
+    const request: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     request.setApproved(true);
 
     expect(() => useCase.run(request)).toThrow(RejectedOrderCannotBeApprovedException);
@@ -60,14 +57,13 @@ describe('OrderApprovalUseCase', () => {
   });
 
   it('cannotRejectApprovedOrder', () => {
-    const initialOrder: Order = new Order(1, 'EUR');
-    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
+    const initialOrder: Order = new Order(new OrderId(1), 'EUR');
+    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     requestToBeApproved.setApproved(true)
     initialOrder.runApproval(requestToBeApproved)
     orderRepository.addOrder(initialOrder);
 
-    const request: OrderApprovalRequest = new OrderApprovalRequest();
-    request.setOrderId(1);
+    const request: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     request.setApproved(false);
 
     expect(() =>  useCase.run(request)).toThrow(ApprovedOrderCannotBeRejectedException);
@@ -75,15 +71,14 @@ describe('OrderApprovalUseCase', () => {
   });
 
   it('shippedOrdersCannotBeApproved', () => {
-    const initialOrder: Order = new Order(1, 'EUR');
-    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
+    const initialOrder: Order = new Order(new OrderId(1), 'EUR');
+    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     requestToBeApproved.setApproved(true)
     initialOrder.runApproval(requestToBeApproved)
     initialOrder.runShipment()
     orderRepository.addOrder(initialOrder);
 
-    const request: OrderApprovalRequest = new OrderApprovalRequest();
-    request.setOrderId(1);
+    const request: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     request.setApproved(true);
 
     expect(() => useCase.run(request)).toThrow(ShippedOrdersCannotBeChangedException);
@@ -91,15 +86,14 @@ describe('OrderApprovalUseCase', () => {
   });
 
   it('shippedOrdersCannotBeRejected', () => {
-    let initialOrder: Order = new Order(1, 'EUR');
-    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest();
+    let initialOrder: Order = new Order(new OrderId(1), 'EUR');
+    let requestToBeApproved: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     requestToBeApproved.setApproved(true)
     initialOrder.runApproval(requestToBeApproved)
     initialOrder.runShipment()
     orderRepository.addOrder(initialOrder);
 
-    let request: OrderApprovalRequest = new OrderApprovalRequest();
-    request.setOrderId(1);
+    let request: OrderApprovalRequest = new OrderApprovalRequest(initialOrder.getId());
     request.setApproved(false);
 
     expect(() => useCase.run(request)).toThrow(ShippedOrdersCannotBeChangedException);

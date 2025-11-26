@@ -1,8 +1,9 @@
-import Order from '../domain/Order';
+import {Order,OrderId} from '../domain/Order';
 
 interface OrderRepository {
   save(order: Order): void;
-  getById(orderId: number): Order;
+  getByNumber(orderIdNumber: number): Order;
+  getById(orderId: OrderId): Order;
 }
 
 export default OrderRepository;

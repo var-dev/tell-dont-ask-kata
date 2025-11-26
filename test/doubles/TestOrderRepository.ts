@@ -1,4 +1,4 @@
-import Order from '../../src/domain/Order';
+import {Order, OrderId} from '../../src/domain/Order';
 import OrderRepository from '../../src/repository/OrderRepository';
 
 class TestOrderRepository implements OrderRepository {
@@ -14,8 +14,13 @@ class TestOrderRepository implements OrderRepository {
       this.insertedOrder = order;
   }
 
-  public getById(orderId: number): Order {
-      const result = this.orders.find(o => o.getId() == orderId);
+  public getByNumber(orderIdNumber: number): Order {
+      const result = this.orders.find(o => o.getId().id === orderIdNumber);
+      if(!result) throw new Error("Order not found");
+      return result;
+  }
+  public getById(orderId: OrderId): Order {
+      const result = this.orders.find(o => o.getId().id === orderId.id);
       if(!result) throw new Error("Order not found");
       return result;
   }

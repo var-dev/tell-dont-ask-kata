@@ -1,14 +1,10 @@
+import { OrderId } from "../domain/Order";
 class OrderApprovalRequest {
-  //@ts-ignore
-  private orderId: number;
-  //@ts-ignore
-  private approved: boolean;
 
-  public  setOrderId(orderId: number): void {
-    this.orderId = orderId;
-  }
+  private approved: boolean = false;
+  constructor(public readonly orderId: OrderId){}
 
-  public getOrderId(): number {
+  public getOrderId(): OrderId {
     return this.orderId;
   }
 

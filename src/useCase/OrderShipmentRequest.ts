@@ -1,12 +1,10 @@
-class OrderShipmentId {
-  constructor(public readonly orderID: number){ }
-}
+import { OrderId } from "../domain/Order";
 class OrderShipmentRequest {
-  constructor(private orderId: OrderShipmentId){}
+  constructor(private orderId: OrderId){}
 
-  public getOrderId(): OrderShipmentId {
+  public getOrderId(): OrderId {
       return this.orderId;
   }
 }
 
-export  {OrderShipmentRequest, OrderShipmentId}
+export  {OrderShipmentRequest, OrderId as OrderShipmentId}
