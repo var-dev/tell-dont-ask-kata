@@ -1,15 +1,14 @@
 import SellItemRequest from "./SellItemRequest";
+import {cloneDeep} from "lodash"
 
 class SellItemsRequest {
-  //@ts-ignore
-  private requests: SellItemRequest[];
-
-  public setRequests(requests: SellItemRequest[]): void {
-      this.requests = requests;
+  constructor(private requests: SellItemRequest[]){}
+  public addRequest(request: SellItemRequest): void {
+      this.requests.push(request);
   }
 
-  public getRequests(): SellItemRequest[] {
-    return this.requests;
+  get getRequests(): SellItemRequest[] {
+    return cloneDeep(this.requests);
   }
 }
 

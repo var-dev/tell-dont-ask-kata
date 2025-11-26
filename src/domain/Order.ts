@@ -67,7 +67,7 @@ class Order {
     this.tax = this.items.reduce((sum, currentItem)=> sum + currentItem.getTax(),0)
   }
   public runSellItemsRequest(request: SellItemsRequest, productCatalog: ProductCatalog){
-    for (const itemRequest of request.getRequests()) {
+    for (const itemRequest of request.getRequests) {
       const product: Product = productCatalog.getByName(itemRequest.getProductName());
       this.addItem(new OrderItem(product, itemRequest.getQuantity()));
     }

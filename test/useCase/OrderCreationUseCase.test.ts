@@ -22,10 +22,9 @@ describe('OrderApprovalUseCase', () => {
       let saladRequest: SellItemRequest = new SellItemRequest('salad', 2);
       let tomatoRequest: SellItemRequest = new SellItemRequest('tomato', 3);
 
-      let request: SellItemsRequest = new SellItemsRequest();
-      request.setRequests([]);
-      request.getRequests().push(saladRequest);
-      request.getRequests().push(tomatoRequest);
+      let request: SellItemsRequest = new SellItemsRequest([]);
+      request.addRequest(saladRequest);
+      request.addRequest(tomatoRequest);
 
       useCase.run(request, new Order(1, 'EUR'));
 
@@ -48,10 +47,9 @@ describe('OrderApprovalUseCase', () => {
   });
 
   it('unknownProduct', () => {
-      let request: SellItemsRequest = new SellItemsRequest();
-      request.setRequests([]);
+      let request: SellItemsRequest = new SellItemsRequest([]);
       let unknownProductRequest: SellItemRequest = new SellItemRequest('unknown product', 8);
-      request.getRequests().push(unknownProductRequest);
+      request.addRequest(unknownProductRequest);
 
       expect(() => useCase.run(request, new Order(1, 'EUR'))).toThrow(UnknownProductException);
   });

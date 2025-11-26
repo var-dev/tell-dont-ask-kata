@@ -6,11 +6,13 @@
     "test": "jest --watchAll"
   },
   "devDependencies": {
-    "@types/node":"*",
-    "@types/jest":"*",
-    "jest":       "*",
-    "ts-jest":    "*",
-    "ts-node":    "*",
+    "@types/jest": "*",
+    "@types/lodash": "^4.17.21",
+    "@types/node": "*",
+    "jest": "*",
+    "lodash": "^4.17.21",
+    "ts-jest": "*",
+    "ts-node": "*",
     "typescript": "*"
   },
   "jest": {
