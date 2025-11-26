@@ -12,18 +12,9 @@ import TestOrderRepository from '../doubles/TestOrderRepository';
 
 describe('OrderApprovalUseCase', () => {
   const orderRepository: TestOrderRepository = new TestOrderRepository();
-  let food: Category = new Category();
-  food.setName('food');
-  food.setTaxPercentage(10);
-
-  const saladProduct = new Product();
-  saladProduct.setName('salad');
-  saladProduct.setPrice(3.56);
-  saladProduct.setCategory(food);
-  const tomatoProduct = new Product();
-  tomatoProduct.setName('tomato');
-  tomatoProduct.setPrice(4.65);
-  tomatoProduct.setCategory(food);
+  const food: Category = new Category('food', 10);
+  const saladProduct = new Product('salad', 3.56, food);
+  const tomatoProduct = new Product('tomato', 4.65, food);
   const productCatalog: ProductCatalog = new InMemoryProductCatalog([ saladProduct, tomatoProduct]);
   const useCase: OrderCreationUseCase = new OrderCreationUseCase(orderRepository, productCatalog);
 
