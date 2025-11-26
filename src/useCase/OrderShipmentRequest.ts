@@ -1,14 +1,12 @@
+class OrderShipmentId {
+  constructor(public readonly orderID: number){ }
+}
 class OrderShipmentRequest {
-  //@ts-ignore
-  private orderId: number;
+  constructor(private orderId: OrderShipmentId){}
 
-  public setOrderId(orderId: number): void {
-      this.orderId = orderId;
-  }
-
-  public getOrderId(): number {
+  public getOrderId(): OrderShipmentId {
       return this.orderId;
   }
 }
 
-export default OrderShipmentRequest;
+export  {OrderShipmentRequest, OrderShipmentId}
