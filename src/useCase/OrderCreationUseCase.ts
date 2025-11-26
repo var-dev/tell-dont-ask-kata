@@ -12,10 +12,11 @@ class OrderCreationUseCase {
     this.productCatalog = productCatalog;
   }
 
-  public run(request: SellItemsRequest): void {
-    const order: Order = new Order(1, 'EUR').runSellItemsRequest(request, this.productCatalog);
+  public run(request: SellItemsRequest, order: Order): void {
+    order.runSellItemsRequest(request, this.productCatalog);
     this.orderRepository.save(order);
   }
 }
 
 export default OrderCreationUseCase;
+

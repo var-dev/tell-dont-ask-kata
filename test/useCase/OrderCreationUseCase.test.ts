@@ -27,7 +27,7 @@ describe('OrderApprovalUseCase', () => {
       request.getRequests().push(saladRequest);
       request.getRequests().push(tomatoRequest);
 
-      useCase.run(request);
+      useCase.run(request, new Order(1, 'EUR'));
 
       const insertedOrder: Order = orderRepository.getSavedOrder();
       expect(insertedOrder.getStatus().isCreated()).toBe(new OrderCreated().isCreated());
@@ -53,6 +53,6 @@ describe('OrderApprovalUseCase', () => {
       let unknownProductRequest: SellItemRequest = new SellItemRequest('unknown product', 8);
       request.getRequests().push(unknownProductRequest);
 
-      expect(() => useCase.run(request)).toThrow(UnknownProductException);
+      expect(() => useCase.run(request, new Order(1, 'EUR'))).toThrow(UnknownProductException);
   });
 });
